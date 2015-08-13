@@ -8,9 +8,9 @@
 <body>
 <div class='main'>
     <h1>Thesis Database</h1>
-    <div class='form-section'>
+    <center class='form-section'>
         <form action="" method="post">
-            <div>
+            <p>
                 <label for="year">Year:</label>
                 <select id="year" name="year">
                     <option value="2011">2011</option>
@@ -19,20 +19,20 @@
                     <option value="2014">2014</option>
                     <option value="2015">2015</option>
                 </select>
-            </div>
-            <div>
+            </p>
+            <p>
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title"/>
-            </div>
-            <div>
+            </p>
+            <p>
                 <label for="abstract">Abstract:</label>
                 <textarea id="asbtract" name="abstract"></textarea>
-            </div>
-            <div>
+            </p>
+            <p>
                 <label for="adviser">Adviser:</label>
                 <input type="text" id="adviser" name="adviser"/>
-            </div>
-            <div>
+            </p>
+            <p>
                 <label for="section">Section:</label>
                 <select id="section" name="section">
                     <option value="1">1</option>
@@ -41,21 +41,25 @@
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
-                </select>
-            </div>
+            </p>
+            <p>
+                <input class="button" type="submit" value="Submit Thesis">
+            </p>
         </form>
-    </div>
-    <div class='list-section'>
+    </center>
+    <center class='list-section'>
         <table>
             <tr>
                 <td class="head1">Year</td>
                 <td class="head2">Title</td>
+                <!--
                 <td class="head3">Abstract</td>
                 <td class="head4">Adviser</td>
                 <td class="head5">Section</td>
+                -->
             </tr>
         </table>
-    </div>
+    </center>
 </div>
 
 

@@ -19,7 +19,7 @@ class ThesisDB(ndb.Model):
     abstract = ndb.TextProperty(required=True)
     adviser = ndb.StringProperty(required=True)
     section = ndb.IntegerProperty(required=True)
-
+    datecreated = ndb.DateTimeProperty(auto_now_add=True)
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -28,15 +28,64 @@ class MainPage(webapp2.RequestHandler):
 
     def post(self):
         thesis = ThesisDB(
-            year=cgi.escape(self.request.get('year')),
+            year=int(self.request.get('year')),
             title=cgi.escape(self.request.get('title')),
             abstract=cgi.escape(self.request.get('abstract')),
             adviser=cgi.escape(self.request.get('adviser')),
-            section=cgi.escape(self.request.get('section')),
+            section=int(self.request.get('section')),
             )
-        student.put() 
+        thesis.put()
+        self.redirect('/api/student')
+
+class APIThesis(webapp2.RequestHandler):
+    def get(self):
+        thesis = ThesisDB.query().order(-ThesisDB.datecreated).fetch()
+        thesis_list = []
+
+        for paper in thesis:
+            thesis_list.append({
+                'id': paper.key.urlsafe(),
+                'year': paper.year,
+                'title': paper.title,
+                'abstract': paper.abstract,
+                'adviser' : paper.adviser,
+                'section' : paper.section
+            })
+
+        response = {
+            'result': 'OK',
+            'data': thesis_list
+        }
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(response))
+
+    def post(self):
+        thesis = ThesisDB(
+            year=int(self.request.get('year')),
+            title=cgi.escape(self.request.get('title')),
+            abstract=cgi.escape(self.request.get('abstract')),
+            adviser=cgi.escape(self.request.get('adviser')),
+            section=int(self.request.get('section')),
+            )
+        thesis.put()
+
+        self.response.headers['Content-Type'] = 'application/json'
+        response = {
+            'result': 'OK',
+            'data': {
+                'id': thesis.key.urlsafe(),
+                'year': thesis.year,
+                'title': thesis.title,
+                'abstract': thesis.abstract,
+                'adviser' : thesis.adviser,
+                'section' : thesis.section,
+            }
+        }
+        self.response.out.write(json.dumps(response))
 
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage)
+    ('/', MainPage),
+    ('/api/thesis', APIThesis),
 ], debug=True)
